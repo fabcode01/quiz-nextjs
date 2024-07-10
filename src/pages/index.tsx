@@ -29,7 +29,6 @@ export default function Home() {
 
     const resp = await fetch(`${BASE_URL}/questoes/${idQuestao}`)
     const json = await resp.json()
-    console.log(json)
     const novaQuestao = QuestaoModel.criarUsandoObjeto(json)
     setQuestao(novaQuestao)
 
@@ -72,11 +71,12 @@ export default function Home() {
  }
 
  function finalizar(){
+  
   router.push({
     pathname: '/resultado',
     query: {
-      total: idsDasQuestoes.length,
-      certas: respostasCertas
+      total: +idsDasQuestoes.length,
+      certas: +respostasCertas
     }
   })
  }

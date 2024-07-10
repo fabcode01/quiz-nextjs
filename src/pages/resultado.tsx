@@ -2,21 +2,36 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import styles from '../styles/resultado.module.css'
 import Botao from "../../components/Botao/Botao"
+import Estastistica from "../../components/Estastistica/Estastistica"
+import { useEffect, useState } from "react"
+
+
+
 
 
 export default function Resultado(){
+
     const router = useRouter()
 
-    const certas = router.query.certas
-    const total = router.query.total
+    const { certas } = router.query
+    const { total } = router.query
 
+    const[Qcertas, setQCertas] = useState<any>()
+    const[Qtotal, setQTotal] = useState<any>()
 
-    function percentual(){
-        if(certas && total) {
-        return Math.round((+certas / +total * 100))
-    }
+   useEffect(()=>{
+        if(certas && total){
+            setQCertas(+certas)
+            setQTotal(+total)
+        }
+   },[certas, total])
+    
+  
 
-    const percentualCorretas = percentual()
+    
+
+    const Percentual = Math.round((Qcertas / Qtotal) * 100)
+
 
     return (
         <div className={styles.resultado}>
@@ -24,10 +39,12 @@ export default function Resultado(){
                 <title>Resultados</title>
             </Head>
            
-            <h1>Resultado</h1>
-            <div>Total de perguntas: <span>{total}</span></div>
-            <div>Total de acertos: <span>{certas}</span></div>
-            <div>Percentual: <span>{`${percentualCorretas}%`} </span></div>
+           <Estastistica
+                total={Qtotal}
+                certas={Qcertas}
+                percentualCorretas={Percentual}
+
+           />
 
             <Botao
                 texto="Reiniciar"
@@ -35,4 +52,4 @@ export default function Resultado(){
             />
         </div>
     )
-}}
+}
